@@ -93,7 +93,7 @@ public class FlappyBird extends ApplicationAdapter {
 
 		birdState = 0;
 		game_state = 0;
-		gap = 500;
+		gap = 300;
 		velocity = 0;
 		gravity = 0.7f;
 		random = new Random();
@@ -134,9 +134,9 @@ public class FlappyBird extends ApplicationAdapter {
 		dificilSprite.setPosition(Gdx.graphics.getWidth()/2-facilSprite.getWidth()/2,(Gdx.graphics.getHeight()/2-dificilSprite.getHeight()/2) - 800);*/
 
 
-		facilSprite.setSize(400, 150);
-		intermedioSprite.setSize(400, 150);
-		dificilSprite.setSize(400, 150);
+		//facilSprite.setAlpha(1f);
+		//intermedioSprite.setAlpha(1f);
+		//dificilSprite.setAlpha(1f);
 		facilSprite.draw(batch);
         intermedioSprite.draw(batch);
         dificilSprite.draw(batch);
@@ -159,26 +159,26 @@ public class FlappyBird extends ApplicationAdapter {
                 if (facilSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
                     gravity = 0.4f;
                 	game_state = 1;
+                	gap = 500;
 
 
                 }
 				if (intermedioSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
 					gravity = 0.6f;
                 	game_state = 1;
+                	gap = 400;
 				}
 				if (dificilSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
 					gravity = 0.8f;
                 	game_state = 1;
+                	gap = 300;
 				}
+				facilSprite.setColor( facilSprite.getColor().r, facilSprite.getColor().g, facilSprite.getColor().b, 0f);
+				intermedioSprite.setColor( intermedioSprite.getColor().r, intermedioSprite.getColor().g, intermedioSprite.getColor().b, 0f);
+				dificilSprite.setColor( dificilSprite.getColor().r, dificilSprite.getColor().g, dificilSprite.getColor().b, 0f);
+				//intermedioSprite.setAlpha(0.1f);
+				//dificilSprite.setAlpha(0.1f);
 
-				//facilSprite.setSize(0,0);
-				//intermedioSprite.setSize(0,0);
-				//dificilSprite.setSize(0,0);
-				facilSprite.flip(false, true);
-               // facilSprite.setColor(0);
-               // intermedioSprite.setColor(0);
-               // dificilSprite.setColor(0);
-			    //game_state = 1;
 			}
 		}
 		// jugando
@@ -276,28 +276,34 @@ public class FlappyBird extends ApplicationAdapter {
 		}
 		// game over
 		else if (game_state == 2){
-			drawMenu();
-		    musica.stop();
+			//drawMenu();
+			facilSprite.setColor( facilSprite.getColor().r, facilSprite.getColor().g, facilSprite.getColor().b, 1f);
+			intermedioSprite.setColor( intermedioSprite.getColor().r, intermedioSprite.getColor().g, intermedioSprite.getColor().b, 1f);
+			dificilSprite.setColor( dificilSprite.getColor().r, dificilSprite.getColor().g, dificilSprite.getColor().b, 1f);
+			musica.stop();
 			batch.draw(gameOver, Gdx.graphics.getWidth()/2 - gameOver.getWidth()/2, Gdx.graphics.getHeight()/2 - gameOver.getHeight()/2);
 			if (Gdx.input.justTouched()){
-                /*if (facilSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
+                if (facilSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
                     gravity = 0.4f;
                     game_state = 1;
+                    gap = 500;
 
 
                 }
                 if (intermedioSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
                     gravity = 0.6f;
                     game_state = 1;
+                    gap = 400;
                 }
                 if (dificilSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
                     gravity = 0.8f;
                     game_state = 1;
+                    gap = 300;
                 }
+				facilSprite.setColor( facilSprite.getColor().r, facilSprite.getColor().g, facilSprite.getColor().b, 0f);
+				intermedioSprite.setColor( intermedioSprite.getColor().r, intermedioSprite.getColor().g, intermedioSprite.getColor().b, 0f);
+				dificilSprite.setColor( dificilSprite.getColor().r, dificilSprite.getColor().g, dificilSprite.getColor().b, 0f);
 
-                facilSprite.setColor(0);
-                intermedioSprite.setColor(0);
-                dificilSprite.setColor(0);*/
 			    game_state = 1;
 				score = 0;
 				pipeActivo = 0;
