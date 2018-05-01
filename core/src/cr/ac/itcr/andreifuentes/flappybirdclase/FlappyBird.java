@@ -31,6 +31,7 @@ public class FlappyBird extends ApplicationAdapter {
 	Sprite facilSprite;
 	Sprite intermedioSprite;
 	Sprite dificilSprite;
+	Sprite birdSprite;
 	Music musica;
 	int birdState;
 	float gap;
@@ -50,6 +51,7 @@ public class FlappyBird extends ApplicationAdapter {
 	BitmapFont font;
 	int game_state;
 	int birdSize;
+	boolean bajando;
 
 	Circle birdCircle;
 	Rectangle[] topPipes;
@@ -120,21 +122,44 @@ public class FlappyBird extends ApplicationAdapter {
 		}
 	}
 
-	@Override
-	public void render () {
-		batch.begin();
-		batch.draw(background, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        facilSprite.draw(batch);
+	public void drawMenu() {
+		/*facilSprite = new Sprite(facil);
+		facilSprite.setSize(400, 150);
+		facilSprite.setPosition(Gdx.graphics.getWidth()/2-facilSprite.getWidth()/2,(Gdx.graphics.getHeight()/2-facilSprite.getHeight()/2) - 200);
+		intermedioSprite = new Sprite(intermedio);
+		facilSprite.setSize(400, 150);
+		intermedioSprite.setPosition(Gdx.graphics.getWidth()/2-intermedioSprite.getWidth()/2,(Gdx.graphics.getHeight()/2-intermedioSprite.getHeight()/2) - 500);
+		dificilSprite = new Sprite(dificil);
+		facilSprite.setSize(400, 150);
+		dificilSprite.setPosition(Gdx.graphics.getWidth()/2-facilSprite.getWidth()/2,(Gdx.graphics.getHeight()/2-dificilSprite.getHeight()/2) - 800);*/
+
+
+		facilSprite.setSize(400, 150);
+		intermedioSprite.setSize(400, 150);
+		dificilSprite.setSize(400, 150);
+		facilSprite.draw(batch);
         intermedioSprite.draw(batch);
         dificilSprite.draw(batch);
 
 
+    }
+
+	@Override
+	public void render () {
+		batch.begin();
+		batch.draw(background, 0,0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        drawMenu();
+
+		facilSprite.draw(batch);
+		intermedioSprite.draw(batch);
+		dificilSprite.draw(batch);
         // no iniciado
 		if (game_state == 0){
 			if (Gdx.input.justTouched()){
                 if (facilSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
                     gravity = 0.4f;
                 	game_state = 1;
+
 
                 }
 				if (intermedioSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
@@ -145,6 +170,14 @@ public class FlappyBird extends ApplicationAdapter {
 					gravity = 0.8f;
                 	game_state = 1;
 				}
+
+				//facilSprite.setSize(0,0);
+				//intermedioSprite.setSize(0,0);
+				//dificilSprite.setSize(0,0);
+				facilSprite.flip(false, true);
+               // facilSprite.setColor(0);
+               // intermedioSprite.setColor(0);
+               // dificilSprite.setColor(0);
 			    //game_state = 1;
 			}
 		}
@@ -221,6 +254,7 @@ public class FlappyBird extends ApplicationAdapter {
 
 			if (Gdx.input.justTouched()){
 				velocity = velocity - 15;
+
 			}
 
 			birdState = birdState == 0 ? 1 : 0;
@@ -242,10 +276,29 @@ public class FlappyBird extends ApplicationAdapter {
 		}
 		// game over
 		else if (game_state == 2){
-			musica.stop();
+			drawMenu();
+		    musica.stop();
 			batch.draw(gameOver, Gdx.graphics.getWidth()/2 - gameOver.getWidth()/2, Gdx.graphics.getHeight()/2 - gameOver.getHeight()/2);
 			if (Gdx.input.justTouched()){
-				game_state = 1;
+                /*if (facilSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
+                    gravity = 0.4f;
+                    game_state = 1;
+
+
+                }
+                if (intermedioSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
+                    gravity = 0.6f;
+                    game_state = 1;
+                }
+                if (dificilSprite.getBoundingRectangle().contains(Gdx.input.getX(), Gdx.graphics.getHeight()-Gdx.input.getY())) {
+                    gravity = 0.8f;
+                    game_state = 1;
+                }
+
+                facilSprite.setColor(0);
+                intermedioSprite.setColor(0);
+                dificilSprite.setColor(0);*/
+			    game_state = 1;
 				score = 0;
 				pipeActivo = 0;
 				velocity = 0;
@@ -253,7 +306,26 @@ public class FlappyBird extends ApplicationAdapter {
 			}
 		}
 
-		batch.draw(birds[birdState], Gdx.graphics.getWidth() / 2 - birds[birdState].getWidth()/2,  birdY,  birds[birdState].getWidth() + birdSize, birds[birdState].getHeight() + birdSize);
+		birdSprite = new Sprite(birds[birdState]);
+		birdSprite.setSize(100, 100);
+		birdSprite.setPosition(Gdx.graphics.getWidth() / 2 - birds[birdState].getWidth()/2, birdY);
+
+		if(birdY > (Gdx.graphics.getHeight() / 2) - 150){
+			birdSprite.rotate(45);
+			bajando = false;
+		}
+		else if(birdY < (Gdx.graphics.getHeight() / 2) + 150){
+			birdSprite.rotate(-45);
+			bajando = true;
+		}
+		else {
+			if(bajando) birdSprite.rotate(45);
+			else birdSprite.rotate(-45);
+		}
+
+
+		birdSprite.draw(batch);
+		//batch.draw(birds[birdState], Gdx.graphics.getWidth() / 2 - birds[birdState].getWidth()/2,  birdY,  birds[birdState].getWidth() + birdSize, birds[birdState].getHeight() + birdSize);
 		font.draw(batch, Integer.toString(score), Gdx.graphics.getWidth()*1/8, Gdx.graphics.getHeight()*9/10);
 		//birdSize += 1;
 		batch.end();
